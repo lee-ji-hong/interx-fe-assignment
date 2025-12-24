@@ -6,7 +6,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const KanbanSection: React.FC<Props> = ({ title, count, children }) => {
+const KanbanSection = ({ title, count, children }: Props) => {
   return (
     <section className="w-72 min-w-[18rem] bg-gray-50 rounded-md p-3 shadow-sm">
       <header className="flex items-center justify-between mb-3">
