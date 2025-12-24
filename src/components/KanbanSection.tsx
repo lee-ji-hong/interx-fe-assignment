@@ -1,7 +1,8 @@
 import React from "react";
+import type { RecruitStatus } from "@/types/user";
 
 type Props = {
-  title: string;
+  title: RecruitStatus;
   count?: number;
   children?: React.ReactNode;
 };
