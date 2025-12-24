@@ -9,6 +9,8 @@ export type RecruitStatus =
 
 export interface User {
   id: number;
+  order: number;
+  userId: string;
   name: string;
   experience: number;
   part: string;
