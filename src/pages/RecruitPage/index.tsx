@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { DndContext, closestCenter, DragEndEvent, DragOverEvent } from "@dnd-kit/core";
+import { DndContext, closestCenter, DragEndEvent, DragOverEvent, DragStartEvent, DragOverlay } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { KanbanSection, Card, SortableItem } from "@/components";
 import { getFromLocalStorage, saveToLocalStorage, applyDragResult } from "@/util";
@@ -9,6 +9,7 @@ const USERS_KEY = "users";
 
 const RecruitPage = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [activeCard, setActiveCard] = useState<User | null>(null);
 
   useEffect(() => {
     const storedUsers = getFromLocalStorage<User[]>(USERS_KEY);
@@ -30,7 +31,13 @@ const RecruitPage = () => {
     return map;
   }, [users]);
 
+  const handleDragStart = ({ active }: DragStartEvent) => {
+    const user = users.find((u) => u.userId === active.id);
+    setActiveCard(user ?? null);
+  };
+
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    setActiveCard(null);
     if (!over) return;
 
     setUsers((prev) => {
@@ -58,10 +65,14 @@ const RecruitPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col px-6">
+    <div className="min-h-screen flex flex-col px-6 overflow-x-hidden">
       <h1 className="text-2xl font-bold mb-4 pt-6">Frontend 채용</h1>
-      <DndContext collisionDetection={closestCenter} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
-        <div className="flex gap-4 overflow-x-auto pb-4 flex-1 items-stretch">
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}>
+        <div className="flex gap-4 pb-4 flex-1 items-stretch overflow-x-visible">
           {RECRUIT_STAGES.map((stage) => {
             const stageUsers = usersByStatus.get(stage) ?? [];
 
@@ -78,6 +89,13 @@ const RecruitPage = () => {
             );
           })}
         </div>
+        <DragOverlay>
+          {activeCard ? (
+            <div className="w-72 opacity-90 shadow-lg">
+              <Card title={activeCard.name} subtitle={`경력 ${activeCard.experience}년 · ${activeCard.part}`} />
+            </div>
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </div>
   );
