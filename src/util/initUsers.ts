@@ -1,5 +1,4 @@
-import { saveToLocalStorage, getFromLocalStorage } from "@/util/localStorage";
-import { MOCK_APPLICANTS } from "@/util/mockApplicants";
+import { saveToLocalStorage, getFromLocalStorage, MOCK_APPLICANTS } from "@/util";
 import type { User } from "@/types/user";
 
 const USERS_KEY = "users";

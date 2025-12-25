@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { initUsers } from "@/util/initUsers";
+import { initUsers } from "@/util";
 import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
