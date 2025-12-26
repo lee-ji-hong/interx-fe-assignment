@@ -6,6 +6,7 @@ import { getFromLocalStorage, saveToLocalStorage, applyDragResult } from "@/util
 import { User, RECRUIT_STAGES, RecruitStatus } from "@/types";
 
 const USERS_KEY = "users";
+type UsersByStatus = Record<RecruitStatus, User[]>;
 
 const RecruitPage = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -19,17 +20,16 @@ const RecruitPage = () => {
     }
   }, []);
 
-  const usersByStatus = useMemo(() => {
-    const map = new Map<RecruitStatus, User[]>();
+  const usersByStatus = useMemo<UsersByStatus>(() => {
+    const result = Object.fromEntries(RECRUIT_STAGES.map((stage) => [stage, [] as User[]])) as UsersByStatus;
 
-    users.forEach((u) => {
-      if (!map.has(u.status)) map.set(u.status, []);
-      map.get(u.status)!.push(u);
+    users.forEach((user) => {
+      result[user.status].push(user);
     });
 
-    map.forEach((list) => list.sort((a, b) => a.order - b.order));
+    Object.values(result).forEach((list) => list.sort((a, b) => a.order - b.order));
 
-    return map;
+    return result;
   }, [users]);
 
   const handleDragStart = ({ active }: DragStartEvent) => {
@@ -88,7 +88,7 @@ const RecruitPage = () => {
           onDragEnd={handleDragEnd}>
           <div className="flex gap-4 pb-4 flex-1 items-stretch overflow-x-visible">
             {RECRUIT_STAGES.map((stage) => {
-              const stageUsers = usersByStatus.get(stage) ?? [];
+              const stageUsers = usersByStatus[stage];
 
               return (
                 <KanbanSection key={stage} title={stage} id={stage} count={stageUsers.length}>
