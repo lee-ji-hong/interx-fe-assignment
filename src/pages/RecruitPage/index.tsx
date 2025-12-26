@@ -79,14 +79,14 @@ const RecruitPage = () => {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col px-6 overflow-x-hidden">
+      <div className="min-h-screen flex flex-col px-6">
         <h1 className="text-2xl font-bold mb-4 pt-6">Frontend 채용</h1>
         <DndContext
           collisionDetection={closestCenter}
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}>
-          <div className="flex gap-4 pb-4 flex-1 items-stretch overflow-x-visible">
+          <div className="flex gap-4 pb-4 flex-1 items-stretch overflow-x-auto">
             {RECRUIT_STAGES.map((stage) => {
               const stageUsers = usersByStatus[stage];
 
