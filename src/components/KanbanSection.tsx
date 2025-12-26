@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import type { RecruitStatus } from "@/types/user";
 
@@ -6,11 +6,12 @@ type Props = {
   id: string;
   title: RecruitStatus;
   count?: number;
-  children?: React.ReactNode;
+  children: (scrollRef: React.RefObject<HTMLDivElement>) => React.ReactNode;
 };
 
 const KanbanSection = ({ id, title, count, children }: Props) => {
   const { setNodeRef } = useDroppable({ id });
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   return (
     <section
@@ -20,7 +21,9 @@ const KanbanSection = ({ id, title, count, children }: Props) => {
         <h3 className="text-sm font-semibold">{title}</h3>
         {typeof count === "number" && <span className="text-xs text-gray-500">{count}</span>}
       </header>
-      <div className="flex-1 min-h-0 overflow-y-auto space-y-2 pr-1">{children}</div>
+      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto pr-1">
+        {children(scrollRef)}
+      </div>
     </section>
   );
 };

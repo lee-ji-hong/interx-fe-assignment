@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { DndContext, closestCenter, DragEndEvent, DragOverEvent, DragStartEvent, DragOverlay } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { KanbanSection, Card, SortableItem, ConfirmModal } from "@/components";
+import { KanbanSection, Card, SortableItem, ConfirmModal, KanbanCardList } from "@/components";
 import { getFromLocalStorage, saveToLocalStorage, applyDragResult } from "@/util";
 import { User, RECRUIT_STAGES, RecruitStatus } from "@/types";
 
@@ -89,16 +89,15 @@ const RecruitPage = () => {
           <div className="flex gap-4 pb-4 flex-1 items-stretch overflow-x-auto">
             {RECRUIT_STAGES.map((stage) => {
               const stageUsers = usersByStatus[stage];
-
               return (
                 <KanbanSection key={stage} title={stage} id={stage} count={stageUsers.length}>
-                  <SortableContext items={stageUsers.map((u) => u.userId)} strategy={verticalListSortingStrategy}>
-                    {stageUsers.map((user) => (
-                      <SortableItem key={user.id} id={user.userId}>
-                        <Card title={user.name} subtitle={user.userId} onDelete={() => setDeleteTarget(user)} />
-                      </SortableItem>
-                    ))}
-                  </SortableContext>
+                  {(scrollRef) => (
+                    <KanbanCardList
+                      scrollRef={scrollRef}
+                      users={stageUsers}
+                      onDelete={(user) => setDeleteTarget(user)}
+                    />
+                  )}
                 </KanbanSection>
               );
             })}
