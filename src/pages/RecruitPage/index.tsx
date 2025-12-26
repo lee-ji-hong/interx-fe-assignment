@@ -95,11 +95,7 @@ const RecruitPage = () => {
                   <SortableContext items={stageUsers.map((u) => u.userId)} strategy={verticalListSortingStrategy}>
                     {stageUsers.map((user) => (
                       <SortableItem key={user.id} id={user.userId}>
-                        <Card
-                          title={user.name}
-                          subtitle={`경력 ${user.experience}년 · ${user.part}`}
-                          onDelete={() => setDeleteTarget(user)}
-                        />
+                        <Card title={user.name} subtitle={user.userId} onDelete={() => setDeleteTarget(user)} />
                       </SortableItem>
                     ))}
                   </SortableContext>
@@ -110,7 +106,7 @@ const RecruitPage = () => {
           <DragOverlay>
             {activeCard ? (
               <div className="w-72 opacity-90 shadow-lg">
-                <Card title={activeCard.name} subtitle={`경력 ${activeCard.experience}년 · ${activeCard.part}`} />
+                <Card title={activeCard.name} subtitle={activeCard.userId} />
               </div>
             ) : null}
           </DragOverlay>
