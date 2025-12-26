@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { DndContext, closestCenter, DragEndEvent, DragOverEvent, DragStartEvent, DragOverlay } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { KanbanSection, Card, SortableItem, ConfirmModal, KanbanCardList } from "@/components";
+import { KanbanSection, Card, ConfirmModal, KanbanCardList } from "@/components";
 import { getFromLocalStorage, saveToLocalStorage, applyDragResult } from "@/util";
 import { User, RECRUIT_STAGES, RecruitStatus } from "@/types";
 
