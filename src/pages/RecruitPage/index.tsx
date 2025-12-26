@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { DndContext, closestCenter, DragEndEvent, DragOverEvent, DragStartEvent, DragOverlay } from "@dnd-kit/core";
 import { KanbanSection, Card, ConfirmModal, KanbanCardList } from "@/components";
-import { getFromLocalStorage, saveToLocalStorage, applyDragResult } from "@/util";
+import { getFromLocalStorage, saveToLocalStorage, applyDragResult, initUsers } from "@/util";
 import { User, RECRUIT_STAGES, RecruitStatus } from "@/types";
 
 const USERS_KEY = "users";
@@ -13,7 +13,9 @@ const RecruitPage = () => {
   const [deleteTarget, setDeleteTarget] = useState<User | null>();
 
   useEffect(() => {
+    initUsers();
     const storedUsers = getFromLocalStorage<User[]>(USERS_KEY);
+
     if (Array.isArray(storedUsers)) {
       setUsers(storedUsers);
     }
